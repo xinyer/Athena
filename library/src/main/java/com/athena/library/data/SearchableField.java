@@ -9,46 +9,44 @@ import com.athena.library.utils.T9Utils;
 
 /**
  * 可搜索的字段
- *
- * @author browserwang
  */
 public class SearchableField {
     /**
      * 字段名字，原实体类的变量名字
      */
-    String fieldName;
+    private String fieldName;
 
     /**
      * 字段值
      */
-    String fieldValue;
+    private String fieldValue;
 
     /**
      * 转拼音类型
      *
      * @see PinyinType
      */
-    PinyinType pinyinType;
+    private PinyinType pinyinType;
 
     /**
      * 字段值不拼，全拼，首字母拼
      */
-    String valueNoPin, valueAllPin, valueHeadPin;
+    private String valueNoPin, valueAllPin, valueHeadPin;
 
     /**
      * 匹配的拼音类型
      */
-    PinyinType matchedPinyinType = PinyinType.NO_PIN;
+    private PinyinType matchedPinyinType = PinyinType.NO_PIN;
 
     /**
      * 匹配的位置
      */
-    int index = -1;
+    private int index = -1;
 
     /**
      * 匹配的长度
      */
-    int len;
+    private int len;
 
     /**
      * 排序条件中“匹配字段”的权重
@@ -56,7 +54,7 @@ public class SearchableField {
      */
     int MatchFieldSortWeight = 1;
 
-    long sortWeight;
+    private long sortWeight;
 
     public SearchableField(String fieldName, String fieldValue, PinyinType pinyinType) {
         this.fieldName = fieldName;
@@ -66,29 +64,19 @@ public class SearchableField {
     }
 
     private void chnToSpell() {
-
         if (pinyinType == PinyinType.HEAD_PIN) {
             String pinyin = ChnToSpell.MakeSpellCode(fieldValue, ChnToSpell.TRANS_MODE_PINYIN_INITIAL);
             valueHeadPin = T9Utils.stringToNumber(pinyin);
-//            Log.d("wx", "fieldValue:" + fieldValue + "\t headPinyin:" + pinyin + "\t num:" + valueHeadPin);
-
         } else if (pinyinType == PinyinType.ALL_PIN) {
             String pinyin = ChnToSpell.MakeSpellCode(fieldValue, ChnToSpell.TRANS_MODE_QUAN_PIN);
             valueAllPin = T9Utils.stringToNumber(pinyin);
-//            Log.d("wx", "fieldValue:" + fieldValue + "\t AllPinyin:" + pinyin + "\t num:" + valueAllPin);
-
         } else if (pinyinType == PinyinType.ALL_PIN_AND_HEAD_PIN) {
             String pinyin1 = ChnToSpell.MakeSpellCode(fieldValue, ChnToSpell.TRANS_MODE_PINYIN_INITIAL);
             valueHeadPin = T9Utils.stringToNumber(pinyin1);
             String pinyin2 = ChnToSpell.MakeSpellCode(fieldValue, ChnToSpell.TRANS_MODE_QUAN_PIN);
             valueAllPin = T9Utils.stringToNumber(pinyin2);
-//            Log.d("wx", "fieldValue:" + fieldValue + "\t HeadPinyin:" + pinyin1 + "\t AllPinyin:" + pinyin2
-//                    + "\t headNum:" + valueHeadPin + "\t allNum:" + valueAllPin);
-
         } else {
             valueNoPin = fieldValue;
-//            Log.d("wx", "fieldValue:" + fieldValue);
-
         }
     }
 
@@ -281,7 +269,6 @@ public class SearchableField {
     /**
      * 获取匹配的长度
      *
-     * @return
      */
     public int getLen() {
         return len;

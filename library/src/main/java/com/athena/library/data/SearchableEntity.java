@@ -8,40 +8,40 @@ import java.util.List;
  */
 public class SearchableEntity {
 
-    MatchDegree matchDegree;
+    private MatchDegree matchDegree;
 
     /**
      * 键名字,标记Entity的唯一性
      */
-    String keyName;
+    private String keyName;
 
     /**
      * 键值,标记Entity的唯一性
      */
-    String keyValue;
+    private Object keyValue;
 
     /**
      * 所有可以搜索的字段
      */
-    List<SearchableField> fields = new ArrayList<>();
+    private List<SearchableField> fields = new ArrayList<>();
 
     /**
      * 匹配的字段
      */
-    SearchableField matchedField;
+    private SearchableField matchedField;
 
     /**
      * 排序条件中“数据来源”的权重
      * 比如 好友=2,陌生人=1
      */
-    int DataSrcSortWeight = 1;
+    private int DataSrcSortWeight = 1;
 
-    public void setKey(String keyName, String keyValue) {
+    public void setKey(String keyName, Object keyValue) {
         this.keyName = keyName;
         this.keyValue = keyValue;
     }
 
-    public String getKeyValue() {
+    public Object getKeyValue() {
         return keyValue;
     }
 
@@ -114,9 +114,6 @@ public class SearchableEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof SearchableEntity)
-            return this.keyValue.equals(((SearchableEntity) o).keyValue);
-
-        return false;
+        return  (o instanceof SearchableEntity) && this.keyValue.equals(((SearchableEntity) o).keyValue);
     }
 }

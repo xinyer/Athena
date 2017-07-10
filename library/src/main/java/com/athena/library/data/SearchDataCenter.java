@@ -136,7 +136,7 @@ public class SearchDataCenter {
                 searchableEntity.addSearchableField(searchableField);
 			} else if (field.isAnnotationPresent(T9SearchKey.class)) {
                 String name = field.getName();
-                String value = getFieldStringValue(field, o);
+                Object value = getSearchKeyValue(field, o);
                 searchableEntity.setKey(name, value);
                 isSetKey = true;
 			}
@@ -163,14 +163,22 @@ public class SearchDataCenter {
         if (field.getType().getName().equals(String.class.getName())) {
             try {  
                 value = (String)field.get(obj);  
-            } catch (IllegalArgumentException e) {  
-                e.printStackTrace();  
-            } catch (IllegalAccessException e) {  
+            } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();  
             }
         }
         return value;
 	}
+
+	private Object getSearchKeyValue(Field field, Object obj) {
+        field.setAccessible(true);
+        try {
+            return field.get(obj);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * 搜索数据初始化Task

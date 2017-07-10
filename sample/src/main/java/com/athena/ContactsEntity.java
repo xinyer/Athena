@@ -10,7 +10,7 @@ import com.athena.library.data.PinyinType;
 public class ContactsEntity {
 
     @T9SearchKey
-    private String key;
+    private long key;
 
     @T9Searchable(PinyinType = PinyinType.ALL_PIN_AND_HEAD_PIN, MatchFieldSortWeight = 2)
     private String name;
@@ -18,13 +18,13 @@ public class ContactsEntity {
     @T9Searchable(MatchFieldSortWeight = 1)
     private String phone;
 
-    public ContactsEntity(String key, String name, String phone) {
+    public ContactsEntity(long key, String name, String phone) {
         this.key = key;
         this.name = name;
         this.phone = phone;
     }
 
-    public String getKey() {
+    public long getKey() {
         return key;
     }
 

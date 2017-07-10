@@ -24,7 +24,7 @@ public class ContactsManager {
 
     private List<ContactsEntity> friends = new ArrayList<>();
 
-    private Map<String, ContactsEntity> friendMap = new HashMap<>();
+    private Map<Object, ContactsEntity> friendMap = new HashMap<>();
     /**
      * 读取手机通讯录db至本地通讯录缓存
      */
@@ -43,8 +43,7 @@ public class ContactsManager {
                 String phone = cursor.getString(PHONES_NUMBER_INDEX);
                 if (TextUtils.isEmpty(phone)) continue;
                 String name = cursor.getString(PHONES_DISPLAY_NAME_INDEX);
-                long contactId = cursor.getLong(PHONES_CONTACT_ID_INDEX);
-                String id = Long.toString(contactId);
+                long id = cursor.getLong(PHONES_CONTACT_ID_INDEX);
                 ContactsEntity friend = new ContactsEntity(id, name, phone);
                 friends.add(friend);
                 friendMap.put(id, friend);
@@ -59,7 +58,7 @@ public class ContactsManager {
         return list;
     }
 
-    public ContactsEntity getContacts(String id) {
+    public ContactsEntity getContacts(Object id) {
         return friendMap.get(id);
     }
 }
