@@ -46,8 +46,8 @@ public class SearchDataCenter {
      *
      * @param list
      */
-    public void initSearchData(List<Object> list) {
-        new SearchDataInitTask().execute(list);
+    public void initSearchData(List<? extends Object> list) {
+        new SearchDataInitTask().execute(list.toArray());
     }
 
     /**
@@ -55,8 +55,8 @@ public class SearchDataCenter {
      *
      * @param list
      */
-    public void appendSearchData(List<Object> list) {
-        new SearchDataAppendTask().execute(list);
+    public void appendSearchData(List<? extends Object> list) {
+        new SearchDataAppendTask().execute(list.toArray());
     }
 
     /**
