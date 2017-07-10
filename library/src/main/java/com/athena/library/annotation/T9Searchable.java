@@ -23,7 +23,7 @@ public @interface T9Searchable {
      * 转拼音类型
      * @return
      */
-	PinyinType PinyinType() default PinyinType.NO_PIN;
+	PinyinType PinyinType() default PinyinType.NO;
 
     /**
      * 排序权重：匹配的字段

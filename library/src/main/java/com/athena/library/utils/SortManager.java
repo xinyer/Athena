@@ -11,7 +11,6 @@ import java.util.List;
 
 /**
  * 排序条件的初始权重
- * Created by browserwang on 15/2/5.
  */
 public class SortManager {
 

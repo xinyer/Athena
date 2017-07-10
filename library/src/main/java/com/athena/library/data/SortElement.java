@@ -1,9 +1,5 @@
 package com.athena.library.data;
 
-/**
- * 排序条件实体
- * Created by browserwang on 15/2/9.
- */
 
 public class SortElement {
 

@@ -12,7 +12,7 @@ public class ContactsEntity {
     @T9SearchKey
     private long key;
 
-    @T9Searchable(PinyinType = PinyinType.ALL_PIN_AND_HEAD_PIN, MatchFieldSortWeight = 2)
+    @T9Searchable(PinyinType = PinyinType.ALL, MatchFieldSortWeight = 2)
     private String name;
 
     @T9Searchable(MatchFieldSortWeight = 1)

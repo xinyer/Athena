@@ -13,12 +13,12 @@ import com.athena.library.data.SearchableEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
+class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
 
     private LayoutInflater layoutInflater;
     private List<SearchableEntity> searchableEntityList = new ArrayList<>();
 
-    public ContactsAdapter(Context context) {
+    ContactsAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -40,7 +40,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         return this.searchableEntityList.size();
     }
 
-    public void update(List<SearchableEntity> list) {
+    void update(List<SearchableEntity> list) {
         this.searchableEntityList.clear();
         this.searchableEntityList.addAll(list);
         notifyDataSetChanged();
@@ -50,7 +50,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         TextView tvName;
         TextView tvPhone;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             tvName = (TextView) itemView.findViewById(R.id.tv_name);
             tvPhone = (TextView) itemView.findViewById(R.id.tv_phone);

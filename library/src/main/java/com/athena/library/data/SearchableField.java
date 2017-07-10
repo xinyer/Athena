@@ -11,6 +11,7 @@ import com.athena.library.utils.T9Utils;
  * 可搜索的字段
  */
 public class SearchableField {
+
     /**
      * 字段名字，原实体类的变量名字
      */
@@ -22,7 +23,7 @@ public class SearchableField {
     private String fieldValue;
 
     /**
-     * 转拼音类型
+     * 汉字转拼音类型
      *
      * @see PinyinType
      */
@@ -31,12 +32,12 @@ public class SearchableField {
     /**
      * 字段值不拼，全拼，首字母拼
      */
-    private String valueNoPin, valueAllPin, valueHeadPin;
+    private String valueNoPinyin, valueCompletePinyin, valueInitialPinyin;
 
     /**
      * 匹配的拼音类型
      */
-    private PinyinType matchedPinyinType = PinyinType.NO_PIN;
+    private PinyinType matchingPinyinType = PinyinType.NO;
 
     /**
      * 匹配的位置
@@ -64,23 +65,23 @@ public class SearchableField {
     }
 
     private void chnToSpell() {
-        if (pinyinType == PinyinType.HEAD_PIN) {
+        if (pinyinType == PinyinType.INITIAL) {
             String pinyin = ChnToSpell.MakeSpellCode(fieldValue, ChnToSpell.TRANS_MODE_PINYIN_INITIAL);
-            valueHeadPin = T9Utils.stringToNumber(pinyin);
-        } else if (pinyinType == PinyinType.ALL_PIN) {
+            valueInitialPinyin = T9Utils.stringToNumber(pinyin);
+        } else if (pinyinType == PinyinType.COMPLETE) {
             String pinyin = ChnToSpell.MakeSpellCode(fieldValue, ChnToSpell.TRANS_MODE_QUAN_PIN);
-            valueAllPin = T9Utils.stringToNumber(pinyin);
-        } else if (pinyinType == PinyinType.ALL_PIN_AND_HEAD_PIN) {
+            valueCompletePinyin = T9Utils.stringToNumber(pinyin);
+        } else if (pinyinType == PinyinType.ALL) {
             String pinyin1 = ChnToSpell.MakeSpellCode(fieldValue, ChnToSpell.TRANS_MODE_PINYIN_INITIAL);
-            valueHeadPin = T9Utils.stringToNumber(pinyin1);
+            valueInitialPinyin = T9Utils.stringToNumber(pinyin1);
             String pinyin2 = ChnToSpell.MakeSpellCode(fieldValue, ChnToSpell.TRANS_MODE_QUAN_PIN);
-            valueAllPin = T9Utils.stringToNumber(pinyin2);
+            valueCompletePinyin = T9Utils.stringToNumber(pinyin2);
         } else {
-            valueNoPin = fieldValue;
+            valueNoPinyin = fieldValue;
         }
     }
 
-    protected MatchDegree compare(String keyword, int dataSrc) {
+    MatchDegree compare(String keyword, int dataSrc) {
         return compare(keyword, pinyinType, dataSrc);
     }
 
@@ -89,17 +90,17 @@ public class SearchableField {
             return MatchDegree.MATCH_NO;
         }
         switch (pinyinType) {
-            case ALL_PIN:
+            case COMPLETE:
                 return  compareAllPin(keyword, dataSrc);
-            case HEAD_PIN:
+            case INITIAL:
                 return compareHeadPin(keyword, dataSrc);
-            case ALL_PIN_AND_HEAD_PIN:
+            case ALL:
                 /*先比较首拼，再比较全拼*/
                 MatchDegree matchDegree = compareHeadPin(keyword, dataSrc);
                 /*首拼匹配返回，否则匹配全拼*/
                 if (matchDegree!=MatchDegree.MATCH_NO) return matchDegree;
                 return compareAllPin(keyword, dataSrc);
-            case NO_PIN:
+            case NO:
                 return compareNoPin(keyword, dataSrc);
             default:
         }
@@ -118,26 +119,26 @@ public class SearchableField {
         index = -1;
         sortWeight=0;
         char firstChar = getFieldValue().charAt(0);
-        matchedPinyinType = PinyinType.ALL_PIN;
+        matchingPinyinType = PinyinType.COMPLETE;
 
-        if (valueAllPin.equals(keyword)) {
+        if (valueCompletePinyin.equals(keyword)) {
             index=0;
-            matchDegree = MatchDegree.MATCH_FULL;
+            matchDegree = MatchDegree.MATCH_COMPLETE;
             sortWeight = SortManager.calculateSortWeight(dataSrc,
                     SortConstants.MATCH_DEGREE.equals,
                     MatchFieldSortWeight,
                     firstChar, 0);
-        } else if (valueAllPin.startsWith(keyword)) {
+        } else if (valueCompletePinyin.startsWith(keyword)) {
             index=0;
             matchDegree = MatchDegree.MATCH_START;
             sortWeight = SortManager.calculateSortWeight(dataSrc,
                     SortConstants.MATCH_DEGREE.starts,
                     MatchFieldSortWeight,
                     firstChar, 0);
-        } else if (valueAllPin.contains(keyword)) {
-            index = valueAllPin.indexOf(keyword);
+        } else if (valueCompletePinyin.contains(keyword)) {
+            index = valueCompletePinyin.indexOf(keyword);
             if (T9Utils.isMatchAllPin(index, fieldValue)) {
-                matchDegree = MatchDegree.MATCH_PART;
+                matchDegree = MatchDegree.MATCH_PARTIAL;
                 sortWeight = SortManager.calculateSortWeight(dataSrc,
                         SortConstants.MATCH_DEGREE.contains,
                         MatchFieldSortWeight,
@@ -147,7 +148,7 @@ public class SearchableField {
                 sortWeight=0;
             }
         } else {
-            matchedPinyinType = PinyinType.NO_PIN;
+            matchingPinyinType = PinyinType.NO;
 
         }
         return matchDegree;
@@ -165,31 +166,31 @@ public class SearchableField {
         index = -1;
         sortWeight = 0;
         char firstChar = getFieldValue().charAt(0);
-        matchedPinyinType = PinyinType.HEAD_PIN;
+        matchingPinyinType = PinyinType.INITIAL;
 
-        if (valueHeadPin.equals(keyword)) {
+        if (valueInitialPinyin.equals(keyword)) {
             index=0;
-            matchDegree = MatchDegree.MATCH_FULL;
+            matchDegree = MatchDegree.MATCH_COMPLETE;
             sortWeight = SortManager.calculateSortWeight(dataSrc,
                     SortConstants.MATCH_DEGREE.equals,
                     MatchFieldSortWeight,
                     firstChar, 0);
-        } else if (valueHeadPin.startsWith(keyword)) {
+        } else if (valueInitialPinyin.startsWith(keyword)) {
             index=0;
             matchDegree = MatchDegree.MATCH_START;
             sortWeight = SortManager.calculateSortWeight(dataSrc,
                     SortConstants.MATCH_DEGREE.starts,
                     MatchFieldSortWeight,
                     firstChar, 0);
-        } else if (valueHeadPin.contains(keyword)) {
-            index = valueHeadPin.indexOf(keyword);
-            matchDegree = MatchDegree.MATCH_PART;
+        } else if (valueInitialPinyin.contains(keyword)) {
+            index = valueInitialPinyin.indexOf(keyword);
+            matchDegree = MatchDegree.MATCH_PARTIAL;
             sortWeight = SortManager.calculateSortWeight(dataSrc,
                     SortConstants.MATCH_DEGREE.contains,
                     MatchFieldSortWeight,
                     firstChar, index);
         } else {
-            matchedPinyinType = PinyinType.NO_PIN;
+            matchingPinyinType = PinyinType.NO;
             sortWeight=0;
         }
 
@@ -208,32 +209,32 @@ public class SearchableField {
         index = -1;
         sortWeight = 0;
         char firstChar = getFieldValue().charAt(0);
-        matchedPinyinType = PinyinType.NO_PIN;
+        matchingPinyinType = PinyinType.NO;
 
-        if (valueNoPin.equals(keyword)) {
+        if (valueNoPinyin.equals(keyword)) {
             index=0;
-            matchDegree = MatchDegree.MATCH_FULL;
+            matchDegree = MatchDegree.MATCH_COMPLETE;
             sortWeight = SortManager.calculateSortWeight(dataSrc,
                     SortConstants.MATCH_DEGREE.equals,
                     MatchFieldSortWeight,
                     firstChar, 0);
-        } else if (valueNoPin.startsWith(keyword)) {
+        } else if (valueNoPinyin.startsWith(keyword)) {
             index=0;
             matchDegree = MatchDegree.MATCH_START;
             sortWeight = SortManager.calculateSortWeight(dataSrc,
                     SortConstants.MATCH_DEGREE.starts,
                     MatchFieldSortWeight,
                     firstChar, 0);
-        } else if (valueNoPin.contains(keyword)) {
-            index = valueNoPin.indexOf(keyword);
-            matchDegree = MatchDegree.MATCH_PART;
+        } else if (valueNoPinyin.contains(keyword)) {
+            index = valueNoPinyin.indexOf(keyword);
+            matchDegree = MatchDegree.MATCH_PARTIAL;
             sortWeight = SortManager.calculateSortWeight(dataSrc,
                     SortConstants.MATCH_DEGREE.contains,
                     MatchFieldSortWeight,
                     firstChar, index);
         } else {
 
-            matchedPinyinType = PinyinType.NO_PIN;
+            matchingPinyinType = PinyinType.NO;
             sortWeight=0;
         }
         return matchDegree;
@@ -274,8 +275,8 @@ public class SearchableField {
         return len;
     }
 
-    public PinyinType getMatchedPinyinType() {
-        return matchedPinyinType;
+    public PinyinType getMatchingPinyinType() {
+        return matchingPinyinType;
     }
 
     public void setMatchFieldSortWeight(int weight) {

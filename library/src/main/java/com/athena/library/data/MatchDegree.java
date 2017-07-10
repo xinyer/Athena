@@ -1,17 +1,17 @@
 package com.athena.library.data;
 
 
-public enum MatchDegree {
+enum MatchDegree {
 
     /**
      * 完全匹配
      */
-    MATCH_FULL,
+    MATCH_COMPLETE,
 
     /**
      * 部分匹配
      */
-    MATCH_PART,
+    MATCH_PARTIAL,
 
     /**
      * 开头匹配
