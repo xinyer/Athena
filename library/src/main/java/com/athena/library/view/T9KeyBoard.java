@@ -1,11 +1,9 @@
 package com.athena.library.view;
 
 import android.content.Context;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,7 +35,7 @@ public class T9KeyBoard extends LinearLayout implements View.OnClickListener, Vi
 
     private void initView(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View v = inflater.inflate(R.layout.t9_keyboard, null);
+        View v = inflater.inflate(R.layout.t9_keyboard, this, false);
 
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         addView(v, params);
