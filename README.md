@@ -2,6 +2,8 @@
 
 simple search library support T9
 
+![demo](demo.png)
+
 # How do I use?
 
 1. Add it in your root build.gradle at the end of repositories:
