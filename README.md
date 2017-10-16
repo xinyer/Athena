@@ -2,7 +2,9 @@
 
 simple search library support T9
 
-![demo](demo.png)
+<div align="center">
+  <img src="demo.png" width="270" height="480" alt="demo" align="center">
+</div>
 
 # How do I use?
 
@@ -56,9 +58,19 @@ List<ContactsEntity> contactsEntityList =  ContactsManager.getInstance().getCont
 SearchDataCenter.getInstance().initSearchData(contactsEntityList);
 
 SearchDataCenter.getInstance().init(this, new SearchDataCenter.OnSearchCompleteListener() {
-            @Override
-            public void onComplete(List<SearchableEntity> list) {
-                //search result callback
-            }
-        });
+    @Override
+    public void onComplete(List<SearchableEntity> list) {
+        //search result callback
+    }
+});
+```
+
+1. destroy SearchDataCenter in your destroy
+
+```java
+@Override
+protected void onDestroy() {
+    super.onDestroy();
+    SearchDataCenter.getInstance().destroy();
+}
 ```
